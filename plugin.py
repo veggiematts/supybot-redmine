@@ -34,7 +34,7 @@ from supybot.commands import *
 import supybot.plugins as plugins
 import supybot.ircutils as ircutils
 import supybot.callbacks as callbacks
-from restkit import BasicAuth, Resource
+from restkit import BasicAuth, Resource, RequestError
 import simplejson as json
 from supybot.utils.structures import TimeoutQueue
 import sys
@@ -103,28 +103,32 @@ class Redmine(callbacks.PluginRegexp):
         for id in ids:
 
 	    # Getting response
-	    response = self.res.get('/issues/' + str(id) + '.json')
-	    data = response.body_string() 
-	    result = json.loads(data)
-	    
-	    # Formatting reply
-	    bugmsg = self.registryValue('bugMsgFormat')
-	    self.log.info("info " + bugmsg);
-	    bugmsg = bugmsg.replace('_ID_', "%s" % id)
-	    bugmsg = bugmsg.replace('_AUTHOR_', result['issue']['author']['name'])
-	    bugmsg = bugmsg.replace('_SUBJECT_', result['issue']['subject'])
-	    bugmsg = bugmsg.replace('_STATUS_', result['issue']['status']['name'])
 	    try:
-		bugmsg = bugmsg.replace('_CATEGORY_', result['issue']['category']['name'])
+		response = self.res.get('/issues/' + str(id) + '.json')
+		data = response.body_string() 
+		result = json.loads(data)
 		
-	    except Exception:
-		bugmsg = bugmsg.replace('_CATEGORY_', 'uncategorized')
+		# Formatting reply
+		bugmsg = self.registryValue('bugMsgFormat')
 		self.log.info("info " + bugmsg);
-	    bugmsg = bugmsg.replace('_URL_', "%s/issues/%s" % (self.url, id))
-	    bugmsg = bugmsg.split('_CRLF_')
+		bugmsg = bugmsg.replace('_ID_', "%s" % id)
+		bugmsg = bugmsg.replace('_AUTHOR_', result['issue']['author']['name'])
+		bugmsg = bugmsg.replace('_SUBJECT_', result['issue']['subject'])
+		bugmsg = bugmsg.replace('_STATUS_', result['issue']['status']['name'])
+		try:
+		    bugmsg = bugmsg.replace('_CATEGORY_', result['issue']['category']['name'])
+		    
+		except Exception:
+		    bugmsg = bugmsg.replace('_CATEGORY_', 'uncategorized')
+		    self.log.info("info " + bugmsg);
+		bugmsg = bugmsg.replace('_URL_', "%s/issues/%s" % (self.url, id))
+		bugmsg = bugmsg.split('_CRLF_')
 
-	    for msg in bugmsg:
-		strings.append(msg)
+		for msg in bugmsg:
+		    strings.append(msg)
+
+	    except RequestError as e:
+		strings.append("An error occured when trying to query Redmine: " + str(e))
 
         return strings
 
