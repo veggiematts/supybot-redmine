@@ -34,9 +34,10 @@ from supybot.commands import *
 import supybot.plugins as plugins
 import supybot.ircutils as ircutils
 import supybot.callbacks as callbacks
+from supybot.utils.structures import TimeoutQueue
+
 from restkit import BasicAuth, Resource, RequestError
 import simplejson as json
-from supybot.utils.structures import TimeoutQueue
 import sys
 import random
 
@@ -61,7 +62,7 @@ class Redmine(callbacks.PluginRegexp):
      
 	self.url = self.registryValue('urlbase')
 	self.auth = BasicAuth(self.registryValue('apikey'), str(random.random()))
-	self.res = Resource(self.url, filters=[self.auth])
+	self.resource = Resource(self.url, filters=[self.auth])
 
     def snarfBug(self, irc, msg, match):
         r"""\bRM\b[\s#]*(?P<id>\d+)"""
@@ -104,13 +105,13 @@ class Redmine(callbacks.PluginRegexp):
 
 	    # Getting response
 	    try:
-		response = self.res.get('/issues/' + str(id) + '.json')
+		response = self.resource.get('/issues/' + str(id) + '.json')
 		data = response.body_string() 
 		result = json.loads(data)
 		
 		# Formatting reply
 		bugmsg = self.registryValue('bugMsgFormat')
-		self.log.info("info " + bugmsg);
+		#self.log.info("info " + bugmsg);
 		bugmsg = bugmsg.replace('_ID_', "%s" % id)
 		bugmsg = bugmsg.replace('_AUTHOR_', result['issue']['author']['name'])
 		bugmsg = bugmsg.replace('_SUBJECT_', result['issue']['subject'])
