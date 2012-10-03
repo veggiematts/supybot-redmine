@@ -44,7 +44,8 @@ import random
 
 
 class Redmine(callbacks.PluginRegexp):
-    """Displays informations about a Redmine issue.
+    """
+    Displays informations about a Redmine issue.
     """
     threaded = True
     unaddressedRegexps = ['snarfBug']
