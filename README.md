@@ -18,7 +18,7 @@ It is based on the Mantis/Bugzilla plugins, so it uses the same command and more
 
  * apikey: Your Redmine API key. The Rest API must be enabled in Redmine in Administration -> Settings -> Authentication. You can then get your API Key on your account page ( /my/account ) when logged in, on the right-hand pane of the default layout.
 
- * bugMsgFormat: Change the message format for bug details, following tokens will be replaced before being printed: _ID_, _URL_, _AUTHOR_, _CATEGORY_, _SUBJECT_, _STATUS_ .  _CRLF_ will split the response in two (or more) lines.
+ * bugMsgFormat: Change the message format for bug details, following tokens will be replaced before being printed: \_ID\_, \_URL\_, \_AUTHOR\_, \_CATEGORY\_, \_SUBJECT\_, \_STATUS\_ .  \_CRLF\_ will split the response in two (or more) lines.
 
  * bugSnarfer: Determines whether the bug snarfer will be enabled, such that any bug ### seen in the channel will have its information reported into the channel. Channel Specific variable.
 
