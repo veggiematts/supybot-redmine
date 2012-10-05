@@ -42,19 +42,16 @@ def configure(advanced):
 
 
 Redmine = conf.registerPlugin('Redmine')
-# This is where your configuration variables (if any) should go.  For example:
-# conf.registerGlobalValue(Redmine, 'someConfigVariableName',
-#     registry.Boolean(False, """Help for someConfigVariableName."""))
 
 conf.registerChannelValue(Redmine, 'bugSnarfer',
     registry.Boolean(False, """Determines whether the bug snarfer will be
-    enabled, such that any bug ### seen in the channel
+    enabled, such that any RM ### seen in the channel
     will have its information reported into the channel."""))
 
 conf.registerGlobalValue(Redmine, 'bugSnarferTimeout',
     registry.PositiveInteger(300, 
-    """Users often say "bug XXX" several times in a row, in a channel.
-    If "bug XXX" has been said in the last (this many) seconds, don't
+    """Users often say "RM XXX" several times in a row, in a channel.
+    If "RM XXX" has been said in the last (this many) seconds, don't
     fetch its data again. If you change the value of this variable, you
     must reload this plugin for the change to take effect."""))
 
@@ -72,7 +69,10 @@ conf.registerGlobalValue(Redmine, 'bugMsgFormat',
 
 
 conf.registerGlobalValue(Redmine, 'apikey',
-    registry.String('', """Redmine API key""",
+    registry.String('', """Your Redmine API key. The Rest API must be enabled
+    in Redmine (Administration -> Settings -> Authentication). You can then get
+    your API Key on your account page ( /my/account ) when logged in, on the
+    right-hand pane of the default layout.""",
                     private=True))
 
 
