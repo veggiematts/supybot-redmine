@@ -117,12 +117,11 @@ class Redmine(callbacks.PluginRegexp):
 		bugmsg = bugmsg.replace('_AUTHOR_', result['issue']['author']['name'])
 		bugmsg = bugmsg.replace('_SUBJECT_', result['issue']['subject'])
 		bugmsg = bugmsg.replace('_STATUS_', result['issue']['status']['name'])
+		bugmsg = bugmsg.replace('_PROJECT_', result['issue']['project']['name'])
 		try:
 		    bugmsg = bugmsg.replace('_CATEGORY_', result['issue']['category']['name'])
-		    
 		except Exception:
 		    bugmsg = bugmsg.replace('_CATEGORY_', 'uncategorized')
-		    self.log.info("info " + bugmsg);
 		bugmsg = bugmsg.replace('_URL_', "%s/issues/%s" % (self.url, id))
 		bugmsg = bugmsg.split('_CRLF_')
 
@@ -136,8 +135,10 @@ class Redmine(callbacks.PluginRegexp):
 
 
     def bug(self, irc, msg, args, bugNumber):
-        """<bug number>
-        Expand bug # to a full URI
+        """
+	<bug number>
+        
+	Expand bug # to a full URI
         """
         strings = self.getBugs( [ bugNumber ] )
 

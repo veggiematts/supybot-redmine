@@ -64,7 +64,7 @@ conf.registerGlobalValue(Redmine, 'bugMsgFormat',
     registry.String('RM _ID_ - _AUTHOR_ - _STATUS_ - _SUBJECT__CRLF__URL_',
     """Change the message format for bug details, following tokens will 
     be replaced before being printed: _ID_, _URL_, _AUTHOR_, 
-    _CATEGORY_, _SUBJECT_, _STATUS_ .
+    _CATEGORY_, _SUBJECT_, _STATUS_, _PROJECT_ .
     _CRLF_ will split the response in two (or more) lines."""))
 
 
